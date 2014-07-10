@@ -1,0 +1,74 @@
+Suppose that there is a building with 100 floors. You are given 2 identical eggs. The most interesting property of the eggs is that every egg has it’s own “threshold” floor. Let’s call that floor N. What this means is that the egg will not break when dropped from any floor below floor N, but the egg will definitely break from any floor above floor N, including floor N itself.
+
+For example, if the property of the eggs is that N equals 15, those eggs will always break on any floor higher than or equal to the 15th floor, but those eggs will never break on any floor below floor 15. The same holds true for the other egg since they are identical.
+
+These are very strong eggs, because they can be dropped multiple times without breaking as long as they are dropped from floors below their “threshold” floor, floor N. But once an egg is dropped from a floor above it’s threshold floor
+
+Here is the puzzle: What strategy should be taken in order to minimize the number of egg drops used to find floor N (the threshold floor) for the egg? Also, what is the minimum number of drops for the worst case using this strategy?
+
+Remember that you are given 2 identical eggs which both have the same exact threshold floor.
+
+This interview riddle has been asked at many major companies like Google, Microsoft, Accenture, and even Hewlett Packard – and it’s a great one to practice your problem solving skills with.
+
+Using The Binary Search Method
+
+Your first instinct (especially if you are a programmer) may be to solve this problem using the binary search method. So, you think that maybe by dividing the “result set” in half each time you will be able to solve the problem and find the threshold floor for the eggs. In this case the “result set” is the floors in the building, so you start at floor 50 since that is half of 100.
+
+Let’s say we do start at the 50th floor, then what should we do if the egg breaks? This means that the answer is somewhere between the first and 50th floor. And we would be left with only 1 more egg since we started with 2 eggs. Now if we are following the binary search method, it seems that the next step would be to try dropping the remaining egg from the 25th floor. But what if it breaks at the 25th floor? Then we really don’t have an answer to the problem since we have not found the threshold floor for the eggs. Even if it doesn’t break and we decide to go to the next floor (which would be half of 25 or 12.5, which is approximately 13), then if it breaks at the 13th floor then we would still not have an answer to the problem.
+
+Clearly the binary search method does not work for us here, because we only have 2 eggs. The binary search method would be good in a scenario where we have an infinite number of eggs, but we now have to change our strategy and find a better solution.
+
+A new solution
+
+Since we have to find the answer with 2 eggs then why not do something like this: we start by dropping one of the eggs on the 10th floor: if it doesn’t break then we continue on to the 20th floor, then 30th, 40th… up to 100 in intervals of 10 until the first egg actually breaks. If the egg breaks on the 10th floor then we know that the threshold floor must be either the 10th floor or one of the floors below it – the egg will definitely break on any floor above the 10th floor, so we can eliminate all of the floors above the 10th.
+
+If the egg breaks on the 10th floor…
+
+So, the answer must be between floors 1 through 10. We can take the 2nd egg and drop it from the first floor. If it does not break on the first floor, but it does break on the 2nd floor, then we know that the 2nd floor is the “threshold” floor. And if it doesn’t break on any of the floors between 2-8, then we just continue up until the 9th floor, and if it does not break on the 9th floor then we know that the 11th floor is our threshold floor. This will take a maximum of 10 drops to figure out the threshold floor in this instance.
+
+What about the worst case solution? Well, the worst case using this method occurs when the threshold floor is the 100th floor. This means that we use 10 drops to get to the 100th floor, because we start from the 10th floor and go up in intervals of 10 up to the 100th floor, and the first egg will break on the 100th floor. And then we use another 9 drops with the 2nd egg because we have to test floors 90-99 to see if the threshold floor is somewhere in that range. This gives us a total of 19 drops, which is the absolute worst case scenario using this method.
+
+Use the linear search method for this brainteaser
+
+The simple search method we used above is called a linear search – which is simply a sequential search to find a particular value in a list of elements. In this case, the list of elements are floors in a building, and the value we are searching for is the threshold floor in that building for the eggs.
+
+It should be clear to you now that a linear search is indeed necessary with the 2nd egg because we can not risk breaking the 2nd egg before we even find the answer – remember we only have 2 identical eggs and we must find the answer with only 2 eggs. This means that we have some freedom with the 1st egg, and that we can do some interesting work with it. So, now the question is can we improve upon the 19 drops used in the worst case scenario with our approach above?
+
+2 Eggs 100 Floors Puzzle Solution
+
+We want to minimize the number of drops for the worst case, while still using an approach that works well for other scenarios. So, how can we do this? Well, we should rephrase that question and ask ourselves what is really holding us back here? The main reason why it takes such a large number of drops in the worst case with our approach above (19 drops) is because in order to test out the higher floors of the building we have to start at the lower floors of the building, and at that point we have already used a large number of drops just to get to that point.
+
+What we should try to get with our next approach is to try to reduce the worst case scenario by trying to make all possible scenarios take the same number of drops.
+
+What if we tried to reduce the number of drops that would be required with the linear search (with the 2nd egg) after we get to one of the higher floors? This way we counteract the fact that getting to the higher floor took so many drops, and if we use less drops for the linear search we are balancing out the worst case.
+
+Let’s try to figure this out using some simple algebra. Suppose we drop an egg from floor x. If the egg breaks, then we would have to go through the previous x-1 floors one by one using a linear search.
+
+But, if the egg doesn’t break, in our original algorithm we would go up x floors to find the next floor to test from. Why not just go up x-1 floors instead of x floors? This would save us 1 drop if we have to do a linear search with the 2nd egg whenever the first egg breaks – because we would be doing the linear search from floors x+1 to floor ( (x+1) + (x-1)) instead of floors x+1 to floor (x+1) + x. So, that is 1 less egg drop. This means that the next floor that should be attempted to drop from is x + (x-1) if the egg does not break from floor x. And by the same reasoning the floor after that would be x + (x-1) + (x-2) if the egg does not break on floor x + (x-1).
+
+This would go on to form a series that looks like this:
+
+x + (x-1) + (x-2) + (x-3) + ... + 1
+The series above is what’s called a triangular series which is equal to x(x+1)/2. Because there are 100 floors in the building, we set the sum equal to 100 to solve for x:
+
+x(x+1)/2 = 100
+When the sum of the series above equals 100, we get x = 13.651, which rounds up to 14. This means that we should start from floor 14 (which is our x) and then move up x-1 (13) floors to floor 27 if the egg doesn’t break and then move up x-2 (12) floors to floor 39 and so on if the egg still does not break.
+
+This is the number of drops required as we move up the floors in the building:
+
+ Drop    Floor 
+#1  14
+#2  27
+#3  39
+#4  50
+#5  60
+#6  69
+#7  77
+#8  84
+#9  90
+#10 95
+#11 99
+#12 100
+2 Eggs 100 Floors Worst Case Solution
+
+The solution for the worst case in this scenario occurs when the threshold floor is floor number 14 – because we will drop the first egg on floor 14, and it will break. Then we have to test floors 1-13 with the 2nd egg to see where the egg breaks again, and the egg will not break on any of those floors. But since the egg broke on the floor 14, we can conclude that the threshold floor is floor number 14.
