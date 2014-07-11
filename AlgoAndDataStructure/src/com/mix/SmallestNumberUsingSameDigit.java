@@ -1,4 +1,4 @@
-package com.geeksforgeeks.amazon;
+package com.mix;
 
 import java.util.Arrays;
 
