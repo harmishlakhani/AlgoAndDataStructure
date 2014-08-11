@@ -251,6 +251,30 @@ public class LinkedListUtility {
 		return pointer2;
 	}
 	
+	public Node findMiddleInOneScanWithOnePointerOnly(LinkedList list) {
+		
+		Node head = list.getHead();
+		Node mid = head;
+		
+		if(head == null) {
+			System.out.println("List is empty.");
+			return null;
+		}
+		
+		int counter = 0;
+		while(head.getNext() != null) {
+			
+			//check if counter is odd or not by ANDing with 1
+			//we can use reminder operator(%) as well
+			if((counter & 1) == 1) {
+				mid = mid.getNext();
+			}
+			counter++;
+			head = head.getNext();
+		}
+		return mid;
+	}
+
 	public void printInReverse(Node head) {
 		if(head == null)
 			return;
@@ -309,7 +333,7 @@ public class LinkedListUtility {
 		list.insertAtPosition(400, 4);
 		list.insertAtPosition(500, 5);
 		list.insertAtPosition(600, 6);
-		//list.insertAtPosition(700, 7);
+		list.insertAtPosition(700, 7);
 		
 		LinkedList<Integer> list1 = new LinkedList<Integer>();
 		list1.insertAtPosition(2, 1);
@@ -350,10 +374,12 @@ public class LinkedListUtility {
 		
 		/*util.printInReverse(list.getHead());*/
 		
-		LinkedList list3 = util.mergeLists(list1, list2);
+		/*LinkedList list3 = util.mergeLists(list1, list2);
 		if(list3 != null)
-			list3.print();
+			list3.print();*/
 		
+		Node node = util.findMiddleInOneScanWithOnePointerOnly(list);
+		System.out.println("Middle element is :" + node.getData());
 	}
 
 }
