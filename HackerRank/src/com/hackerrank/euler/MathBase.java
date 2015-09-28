@@ -2,35 +2,89 @@ package com.hackerrank.euler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class MathBase {
 
+	/**
+	 * General factorization of number
+	 * @param n
+	 * @return
+	 */
+	public static Set<Integer> factorization(int n) {
+		
+		Set<Integer> set = new HashSet<Integer>();
+		
+		int temp = (int) Math.sqrt(n);
+		for(int i = 1; i <= temp; i++) {
+			if(n % i == 0) {
+				set.add(i);
+				set.add(n / i);
+			}
+		}
+		
+		return set;
+	}
+	
 	/**
 	 * This method is used to find prime factors of any input number
 	 * @param number
 	 * @return
 	 */
-	public Map<Integer, Integer> primeFactorization(int number) {
+	public Map<Integer, Integer> primeFactorization(int n) {
 		
 		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+		int factor = 1;
 		
-		int count2 = 0;
-		while(number % 2 == 0) {
-			number = number / 2;
-			count2++;
-		}
-		map.put(2, count2);
-		
-		for(int i = 3; i <= number; i = i + 1) {
-			if(number % i == 0) {
-				int count = 0;
-				while(number % i == 0) {
-					number = number / i;
-					count++;
+		while(true) {
+			factor = 1;
+			int sqrtN = (int) Math.sqrt(n);
+			
+			if (n % 2 == 0) {
+				int count2 = 0;
+				while (n % 2 == 0) {
+					n = n / 2;
+					count2++;
 				}
-				map.put(i, count);
+				if(map.containsKey(2)) {
+					map.put(2, map.get(2) + count2);
+				} else {
+					map.put(2, count2);
+				}
+			}
+			
+			//for even numbers
+			if (n == 1) {
+				break;
+			}
+
+			for (int i = 3; i <= sqrtN; i = i + 2) {
+				int count = 0;
+				if (n % i == 0) {
+					while (n % i == 0) {
+						n = n / i;
+						count++;
+					}
+					if(map.containsKey(i)) {
+						map.put(i, map.get(i) + count);
+					} else {
+						map.put(i, count);
+					}
+					factor = i;
+				}
+			}
+			//for perfect squares like n = 25, n will become 1 after above loop
+			if (n == 1) {
+				break;
+			}
+
+			//when factor remains 1 it means n is prime so we will exit
+			if(factor == 1) {
+				map.put(n, 1);
+				break;
 			}
 		}
 		
