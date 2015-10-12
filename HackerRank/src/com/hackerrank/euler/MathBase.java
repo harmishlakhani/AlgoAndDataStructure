@@ -145,4 +145,34 @@ public class MathBase {
 		 */
 		return list;
 	}
+	
+	/**
+	 * it will return multiplication of n and list and return same list
+	 * list [3, 2, 1]    -> 123
+	 * n                 -> 11
+	 * ans  [3, 5, 3, 1] -> 1353  
+	 * @param list
+	 * @param n
+	 * @return
+	 */
+	public static List<Integer> multiplication(List<Integer> list, int n) {
+		
+		
+		int carry = 0;
+		int size = list.size();
+		
+		for(int i = 0; i < size ; i++) {
+			
+			int temp = list.get(i) * n + carry;
+			list.set(i, temp % 10);
+			carry = temp / 10;
+		}
+		
+		while(carry != 0) {
+			list.add(carry % 10);
+			carry = carry / 10;
+		}
+		
+		return list;
+	}
 }
